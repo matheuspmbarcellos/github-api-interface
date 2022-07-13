@@ -10,13 +10,13 @@ const Profile = () => {
   return ( <S.Wrapper>
                
         <S.WrapperImage 
-            src="https://avatars.githubusercontent.com/u/100791632?v=4" 
+            src= {githubState.user.avatar_url}
             alt="Avatar of user"
                 />
         <S.WrapperInfoUser>
             <div>
                 <h1>{githubState.user.name}</h1>
-                <S.WrapperUsername>
+                <S.WrapperUserGeneric>
                     <h3>Username: </h3>
                     <a 
                         href={githubState.user.html_url}
@@ -25,7 +25,26 @@ const Profile = () => {
                     >
                         {githubState.user.login}
                     </a>
-                </S.WrapperUsername>
+                </S.WrapperUserGeneric>
+                <S.WrapperUserGeneric>
+                    <h3>Company: </h3>                    
+                        {githubState.user.company}                    
+                </S.WrapperUserGeneric>
+                <S.WrapperUserGeneric>
+                    <h3>Location: </h3>                    
+                        {githubState.user.location}                    
+                </S.WrapperUserGeneric>
+                <S.WrapperUserGeneric>
+                    <h3>Blog: </h3>   
+                    <a 
+                        href={githubState.user.blog}
+                        target="_blank" 
+                        rel="noreferrer"
+                    >
+                        {githubState.user.blog} 
+                    </a>                 
+                                           
+                </S.WrapperUserGeneric>
             </div>
             <S.WrapperStatusCount>
                 <div>
