@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './styled';
 import RepositoryItem from '../repository-item';
+import useGithub from '../../hooks/github-hooks';
 
 
 const Repositories = () => {
+
+    const { githubState, getUserRepos, getUserStarred } = useGithub();
+    const [hasUserForSearchrepos, setHasUserForSearchrepos] = useState(false);
+
+    useEffect(() => {
+        if (githubState.user.login) {
+            getUserRepos(githubState.user.login);
+            getUserStarred(githubState.user.login);
+        }
+        setHasUserForSearchrepos(githubState.repositories);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [githubState.user.login]);
+
+ 
+    
+
     return (
-        <S.WrapperTabs 
+        <>
+            {hasUserForSearchrepos ? (
+            <S.WrapperTabs 
             selectedTabClassName="is-selected"
             selectedTabPanelClassName="is-selected"
         >
@@ -14,20 +34,34 @@ const Repositories = () => {
                 <S.WrapperTab>Starred</S.WrapperTab>
             </S.WrapperTabList>
             <S.WrapperTabPanel>
-                <RepositoryItem 
-                name="Desafio10-cursoemvideo" 
-                linkToRepo="https://github.com/matheuspmbarcellos/Desafio10-cursoemvideo"
-                fullname="matheuspmbarcellos/Desafio10-cursoemvideo"
-                />
+                <S.WrapperList>
+                    {githubState.repositories.map((item) => (
+                        <RepositoryItem 
+                        key={item.id}
+                        name={item.name}
+                        linkToRepo={item.full_name}
+                        fullname={item.full_name}
+                        />
+                    ))}    
+                </S.WrapperList>           
             </S.WrapperTabPanel>      
             <S.WrapperTabPanel>
-                <RepositoryItem 
-                name="Spread-Bootcamp" 
-                linkToRepo="https://github.com/matheuspmbarcellos/Spread-Bootcamp"
-                fullname="matheuspmbarcellos/Spread-Bootcamp"
-                />
-            </S.WrapperTabPanel>         
+                <S.WrapperList>
+                    {githubState.starred.map((item) => (
+                        <RepositoryItem 
+                        key={item.id}
+                        name={item.name}
+                        linkToRepo={item.full_name}
+                        fullname={item.full_name}
+                        />
+                    ))}  
+                </S.WrapperList>             
+            </S.WrapperTabPanel>            
         </S.WrapperTabs>
+        ) : (
+          <></>
+        )}
+      </>
     )
 };
 
